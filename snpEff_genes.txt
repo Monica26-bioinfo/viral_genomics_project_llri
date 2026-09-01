@@ -1,0 +1,7 @@
+# The following table is formatted as tab separated values. 
+#GeneName	GeneId	TranscriptId	BioType	variants_impact_HIGH	variants_impact_LOW	variants_impact_MODERATE	variants_impact_MODIFIER	variants_effect_downstream_gene_variant	variants_effect_missense_variant	variants_effect_non_coding_transcript_exon_variant	variants_effect_splice_region_variant	variants_effect_stop_gained	variants_effect_stop_retained_variant	variants_effect_synonymous_variant	variants_effect_upstream_gene_variant
+POLY	gene-DENV_gp1	TRANSCRIPT_gene-DENV_gp1	protein_coding	5	288	170	16	16	170	0	1	5	1	287	0
+exon-NC_001474.2:10299..10723-1	GENE_exon-NC_001474.2:10299..10723-1	rna-NC_001474.2:10299..10723		0	0	0	232	0	0	14	0	0	0	0	218
+exon-NC_001474.2:10372..10723-1	GENE_exon-NC_001474.2:10372..10723-1	rna-NC_001474.2:10372..10723		0	0	0	230	0	0	13	0	0	0	0	217
+exon-NC_001474.2:10449..10723-1	GENE_exon-NC_001474.2:10449..10723-1	rna-NC_001474.2:10449..10723		0	0	0	225	0	0	11	0	0	0	0	214
+exon-NC_001474.2:10536..10723-1	GENE_exon-NC_001474.2:10536..10723-1	rna-NC_001474.2:10536..10723		0	0	0	220	0	0	7	0	0	0	0	213

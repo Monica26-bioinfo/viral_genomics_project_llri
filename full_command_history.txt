@@ -1,0 +1,38 @@
+samtools faidx dengue_ref.fasta
+for sample in DRR067444 DRR067448 DRR067449 DRR067462 DRR067463 DRR067465; do if [ -f "./trimmed_result/${sample}.trimmed.fastq.gz"]; then echo "Aligning sample: ${sample}"; bwa mem dengue_ref.fasta ./trimmed_result/${sample}.trimmed.fastq.gz > ./aligned/${sample}.sam; samtools view -bS ./aligned/$; {sample}.sam | samtools sort -o ./aligned/${sample}; .sorted.bam; samtools index ./aligned/${sample}.sorted.bam; rm ./aligned/${sample}.sam; else echo "Skipping ${sample} : trimmed file not found."; fi; done
+for sample in DRR067444 DRR067448 DRR067449 DRR067462 DRR067463 DRR067465; do   if [ -f "./trimmed_result/${sample}.trimmed.fastq.gz" ]; then     echo "Aligning sample: ${sample}";          bwa mem dengue_ref.fasta ./trimmed_result/${sample}.trimmed.fastq.gz > ./aligned/${sample}.sam;     samtools view -bS ./aligned/${sample}.sam | samtools sort -o ./aligned/${sample}.sorted.bam;     samtools index ./aligned/${sample}.sorted.bam;     rm ./aligned/${sample}.sam;   else     echo "Skipping ${sample} : trimmed file not found.";   fi; done
+ls -lh aligned/*.sorted.bam
+mkdir -p variants
+for sample in DRR067444 DRR067448 DRR067449 DRR067462 DRR067463 DRR067465; do   if [ -f "./aligned/${sample}.sorted.bam" ]; then     echo "Calling variants for: ${sample}";          freebayes -f dengue_ref.fasta       -p 1       --min-alternate-fraction 0.05       --min-coverage 10       ./aligned/${sample}.sorted.bam > ./variants/${sample}.vcf;   else     echo "Skipping ${sample}: sorted BAM file not found.";   fi; done
+ls -lh variants
+for vcf in variants/*.vcf; do sample=$(basename "$vcf" .vcf); count=$(grep -v "^#" "$vcf" | wc -l); echo "Sample: ${sample} | Total Variants: ${count}"; done
+for vcf in variants/*.vcf; do > sample=$(basename "$vcf" .vcf); > count=$(grep -v "^#" "$vcf" | wc -l); > echo "Sample: ${sample} | Total Variants: ${count}"; > done > variants/variant_counts.txt
+echo "Sample ID,Total variants" > variant_counts.txt
+mv variant_counts.txt variants/
+for vcf in variants/*.vcf; do   sample=$(basename "$vcf" .vcf);   count=$(grep -v "^#" "$vcf" | wc -l);   echo "${sample},${count}" >> variant_counts.txt; done
+for vcf in variants/*.vcf; do   sample=$(basename "$vcf" .vcf);   count=$(grep -v "^#" "$vcf" | wc -l);   echo "${sample},${count}" >> variants/variant_counts.txt; done
+rm variant_counts.txt
+history > project_command_log.txt
+cat ~/.bash_history > full_command_history.txt
+history -w
+samtools faidx dengue_ref.fasta
+for sample in DRR067444 DRR067448 DRR067449 DRR067462 DRR067463 DRR067465; do if [ -f "./trimmed_result/${sample}.trimmed.fastq.gz"]; then echo "Aligning sample: ${sample}"; bwa mem dengue_ref.fasta ./trimmed_result/${sample}.trimmed.fastq.gz > ./aligned/${sample}.sam; samtools view -bS ./aligned/$; {sample}.sam | samtools sort -o ./aligned/${sample}; .sorted.bam; samtools index ./aligned/${sample}.sorted.bam; rm ./aligned/${sample}.sam; else echo "Skipping ${sample} : trimmed file not found."; fi; done
+for sample in DRR067444 DRR067448 DRR067449 DRR067462 DRR067463 DRR067465; do   if [ -f "./trimmed_result/${sample}.trimmed.fastq.gz" ]; then     echo "Aligning sample: ${sample}";          bwa mem dengue_ref.fasta ./trimmed_result/${sample}.trimmed.fastq.gz > ./aligned/${sample}.sam;     samtools view -bS ./aligned/${sample}.sam | samtools sort -o ./aligned/${sample}.sorted.bam;     samtools index ./aligned/${sample}.sorted.bam;     rm ./aligned/${sample}.sam;   else     echo "Skipping ${sample} : trimmed file not found.";   fi; done
+ls -lh aligned/*.sorted.bam
+mkdir -p variants
+for sample in DRR067444 DRR067448 DRR067449 DRR067462 DRR067463 DRR067465; do   if [ -f "./aligned/${sample}.sorted.bam" ]; then     echo "Calling variants for: ${sample}";          freebayes -f dengue_ref.fasta       -p 1       --min-alternate-fraction 0.05       --min-coverage 10       ./aligned/${sample}.sorted.bam > ./variants/${sample}.vcf;   else     echo "Skipping ${sample}: sorted BAM file not found.";   fi; done
+ls -lh variants
+for vcf in variants/*.vcf; do sample=$(basename "$vcf" .vcf); count=$(grep -v "^#" "$vcf" | wc -l); echo "Sample: ${sample} | Total Variants: ${count}"; done
+for vcf in variants/*.vcf; do > sample=$(basename "$vcf" .vcf); > count=$(grep -v "^#" "$vcf" | wc -l); > echo "Sample: ${sample} | Total Variants: ${count}"; > done > variants/variant_counts.txt
+echo "Sample ID,Total variants" > variant_counts.txt
+mv variant_counts.txt variants/
+for vcf in variants/*.vcf; do   sample=$(basename "$vcf" .vcf);   count=$(grep -v "^#" "$vcf" | wc -l);   echo "${sample},${count}" >> variant_counts.txt; done
+for vcf in variants/*.vcf; do   sample=$(basename "$vcf" .vcf);   count=$(grep -v "^#" "$vcf" | wc -l);   echo "${sample},${count}" >> variants/variant_counts.txt; done
+rm variant_counts.txt
+history > project_command_log.txt
+cat ~/.bash_history > full_command_history.txt
+history -w
+R
+copilot
+clear
+history -w

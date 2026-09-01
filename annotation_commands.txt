@@ -1,0 +1,40 @@
+    1  samtools faidx dengue_ref.fasta
+    2  for sample in DRR067444 DRR067448 DRR067449 DRR067462 DRR067463 DRR067465; do if [ -f "./trimmed_result/${sample}.trimmed.fastq.gz"]; then echo "Aligning sample: ${sample}"; bwa mem dengue_ref.fasta ./trimmed_result/${sample}.trimmed.fastq.gz > ./aligned/${sample}.sam; samtools view -bS ./aligned/$; {sample}.sam | samtools sort -o ./aligned/${sample}; .sorted.bam; samtools index ./aligned/${sample}.sorted.bam; rm ./aligned/${sample}.sam; else echo "Skipping ${sample} : trimmed file not found."; fi; done
+    3  for sample in DRR067444 DRR067448 DRR067449 DRR067462 DRR067463 DRR067465; do   if [ -f "./trimmed_result/${sample}.trimmed.fastq.gz" ]; then     echo "Aligning sample: ${sample}";          bwa mem dengue_ref.fasta ./trimmed_result/${sample}.trimmed.fastq.gz > ./aligned/${sample}.sam;     samtools view -bS ./aligned/${sample}.sam | samtools sort -o ./aligned/${sample}.sorted.bam;     samtools index ./aligned/${sample}.sorted.bam;     rm ./aligned/${sample}.sam;   else     echo "Skipping ${sample} : trimmed file not found.";   fi; done
+    4  ls -lh aligned/*.sorted.bam
+    5  mkdir -p variants
+    6  for sample in DRR067444 DRR067448 DRR067449 DRR067462 DRR067463 DRR067465; do   if [ -f "./aligned/${sample}.sorted.bam" ]; then     echo "Calling variants for: ${sample}";          freebayes -f dengue_ref.fasta       -p 1       --min-alternate-fraction 0.05       --min-coverage 10       ./aligned/${sample}.sorted.bam > ./variants/${sample}.vcf;   else     echo "Skipping ${sample}: sorted BAM file not found.";   fi; done
+    7  ls -lh variants
+    8  for vcf in variants/*.vcf; do sample=$(basename "$vcf" .vcf); count=$(grep -v "^#" "$vcf" | wc -l); echo "Sample: ${sample} | Total Variants: ${count}"; done
+    9  for vcf in variants/*.vcf; do > sample=$(basename "$vcf" .vcf); > count=$(grep -v "^#" "$vcf" | wc -l); > echo "Sample: ${sample} | Total Variants: ${count}"; > done > variants/variant_counts.txt
+   10  echo "Sample ID,Total variants" > variant_counts.txt
+   11  mv variant_counts.txt variants/
+   12  for vcf in variants/*.vcf; do   sample=$(basename "$vcf" .vcf);   count=$(grep -v "^#" "$vcf" | wc -l);   echo "${sample},${count}" >> variant_counts.txt; done
+   13  for vcf in variants/*.vcf; do   sample=$(basename "$vcf" .vcf);   count=$(grep -v "^#" "$vcf" | wc -l);   echo "${sample},${count}" >> variants/variant_counts.txt; done
+   14  rm variant_counts.txt
+   15  history > project_command_log.txt
+   16  cat ~/.bash_history > full_command_history.txt
+   17  history -w
+   18  R
+   19  copilot
+   20  clear
+   21  history -w
+   22  conda install -c bioconda snpeff -y
+   23  snpeff download Dengue_virus_2
+   24  snpEff download Dengue_virus_2
+   25  mkdir -p annotated_variants
+   26  for vcf in variants/*.vcf; do base=$(basename "$vcf" .vcf); echo "Annotating ${base}..."; snpEff -v Dengue_virus_2 "$vcf" > "annotated_variants/${base}_annotated.vcf"; done
+   27  ls -lh annotated_variants/
+   28  zip -r annotated_dengue_variants.zip annotated_variants/
+   29  cat ~/.bash_history >> full_command_history.txt
+   30  history > annotation_commands.txt
+   31  snpEff -v Dengue_virus_2 variants/DRR067444.vcf | head -n 30
+   32  snpEff databases | grep -i "dengue"
+   33  snpEff download Dengue_virus_2_uid20183
+   34  wget "ttp://downloads.sourceforge.net/project/snpeff/databases/v4_3/snpEff_v4_3_NCBI_viruses_15.zip"
+   35  # Download Dengue Virus 2 RefSeq FASTA and GFF3 (NC_001474.2)
+   36  wget "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=NC_001474.2&rettype=ft&retmode=text" -O reference.gff3
+   37  mv reference.gffs reference/
+   38  mv reference.gff3 reference/
+   39  mv dengue_ref.fasta reference/
+   40  history > annotation_commands.txt

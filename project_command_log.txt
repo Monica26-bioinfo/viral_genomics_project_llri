@@ -1,0 +1,65 @@
+    1  samtools faidx dengue_ref.fasta
+    2  for sample in DRR067444 DRR067448 DRR067449 DRR067462 DRR067463 DRR067465; do if [ -f "./trimmed_result/${sample}.trimmed.fastq.gz"]; then echo "Aligning sample: ${sample}"; bwa mem dengue_ref.fasta ./trimmed_result/${sample}.trimmed.fastq.gz > ./aligned/${sample}.sam; samtools view -bS ./aligned/$; {sample}.sam | samtools sort -o ./aligned/${sample}; .sorted.bam; samtools index ./aligned/${sample}.sorted.bam; rm ./aligned/${sample}.sam; else echo "Skipping ${sample} : trimmed file not found."; fi; done
+    3  for sample in DRR067444 DRR067448 DRR067449 DRR067462 DRR067463 DRR067465; do   if [ -f "./trimmed_result/${sample}.trimmed.fastq.gz" ]; then     echo "Aligning sample: ${sample}";          bwa mem dengue_ref.fasta ./trimmed_result/${sample}.trimmed.fastq.gz > ./aligned/${sample}.sam;     samtools view -bS ./aligned/${sample}.sam | samtools sort -o ./aligned/${sample}.sorted.bam;     samtools index ./aligned/${sample}.sorted.bam;     rm ./aligned/${sample}.sam;   else     echo "Skipping ${sample} : trimmed file not found.";   fi; done
+    4  ls -lh aligned/*.sorted.bam
+    5  mkdir -p variants
+    6  for sample in DRR067444 DRR067448 DRR067449 DRR067462 DRR067463 DRR067465; do   if [ -f "./aligned/${sample}.sorted.bam" ]; then     echo "Calling variants for: ${sample}";          freebayes -f dengue_ref.fasta       -p 1       --min-alternate-fraction 0.05       --min-coverage 10       ./aligned/${sample}.sorted.bam > ./variants/${sample}.vcf;   else     echo "Skipping ${sample}: sorted BAM file not found.";   fi; done
+    7  ls -lh variants
+    8  for vcf in variants/*.vcf; do sample=$(basename "$vcf" .vcf); count=$(grep -v "^#" "$vcf" | wc -l); echo "Sample: ${sample} | Total Variants: ${count}"; done
+    9  for vcf in variants/*.vcf; do > sample=$(basename "$vcf" .vcf); > count=$(grep -v "^#" "$vcf" | wc -l); > echo "Sample: ${sample} | Total Variants: ${count}"; > done > variants/variant_counts.txt
+   10  echo "Sample ID,Total variants" > variant_counts.txt
+   11  mv variant_counts.txt variants/
+   12  for vcf in variants/*.vcf; do   sample=$(basename "$vcf" .vcf);   count=$(grep -v "^#" "$vcf" | wc -l);   echo "${sample},${count}" >> variant_counts.txt; done
+   13  for vcf in variants/*.vcf; do   sample=$(basename "$vcf" .vcf);   count=$(grep -v "^#" "$vcf" | wc -l);   echo "${sample},${count}" >> variants/variant_counts.txt; done
+   14  rm variant_counts.txt
+   15  history > project_command_log.txt
+   16  cat ~/.bash_history > full_command_history.txt
+   17  history -w
+   18  R
+   19  copilot
+   20  clear
+   21  history -w
+   22  conda install -c bioconda ivar
+   23  clear
+   24  conda config --add channels conda-forge
+   25  conda config --add channels bioconda
+   26  conda config --set channel_priority strict
+   27  conda install bioconda::ivar
+   28  mkdir -p ivar_results
+   29  samtools mpileup -aa -A -d 0 -Q 0 "./aligned/DRR067444.sorted.bam" |   ivar variants     -p "./ivar_results/DRR067444_ivar"     -r "./data/dengue2/sequences.fa"     -g "./data/dengue2/genes.gff"     -q 20     -t 0.03
+   30  samtools mpileup -aa -A -d 0 -Q 0 -f "./data/dengue2/sequences.fa" "./alignments/DRR067444.sorted.bam" |   ivar variants     -p "./ivar_results/DRR067444_ivar"     -g "./data/dengue2/genes.gff"     -r "./data/dengue2/sequences.fa"     -q 20     -t 0.03
+   31  samtools mpileup -aa -A -d 0 -Q 0 -f "./data/dengue2/sequences.fa" "./aligned/DRR067444.sorted.bam" |   ivar variants     -p "./ivar_results/DRR067444_ivar"     -g "./data/dengue2/genes.gff"     -r "./data/dengue2/sequences.fa"     -q 20     -t 0.03
+   32  samtools mpileup -A -d 0 --reference ./data/dengue2/sequences.fa -B -Q 0 ./aligned/DRR067444.sorted.bam | ivar variants -p "./ivar_results/DRR067444_ivar.tsv" -g "./data/dengue2/genes.gff" -q 20 -t 0.03 
+   33  samtools mpileup -A -d 0 --reference ./data/dengue2/sequences.fa -B -Q 0 ./aligned/DRR067444.sorted.bam | ivar variants -p "./ivar_results/DRR067444_ivar.tsv"  -q 20 -t 0.03 
+   34  samtools mpileup -A -d 0 --reference ./data/dengue2/sequences.fa -B -Q 0 ./aligned/DRR067444.sorted.bam |   ivar variants     -p "./ivar_results/DRR067444_ivar.tsv"     -r "./data/dengue2/sequences.fa"     -g "./data/dengue2/genes.gff"     -q 20     -t 0.03
+   35  samtools mpileup -A -d 0 --reference ./data/dengue2/sequences.fa -B -Q 0 ./aligned/DRR067444.sorted.bam | ivar variants -p "./ivar_results/DRR067444_ivar.tsv" -r "./data/dengue2/sequences.fa" -g "./data/dengue2/genes.gff" -q 20 -t 0.03
+   36  samtools mpileup -A -d 0 --reference ./data/dengue2/sequences.fa -B -Q 0 ./aligned/DRR067444.sorted.bam | ivar variants -p "./ivar_results/DRR067444_ivar.tsv"  -g "./data/dengue2/genes.gff" -q 20 -t 0.03
+   37  curl -s "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=NC_001474.2&rettype=gb&retmode=text" > data/dengue2/NC_001474.2.gb
+   38  pip install vcf-annotator
+   39  mkdir -p ivar_results/annotated
+   40  for sample in DRR067444 DRR067448 DRR067449 DRR067462 DRR067463 DRR067465; do   echo "Processing ${sample}...";   
+  samtools mpileup -A -d 0 --reference ./data/dengue2/sequences.fa -B -Q 0 "./aligned/${sample}.sorted.bam" |     ivar variants -p "./ivar_results/${sample}_ivar" -q 20 -t 0.03;   
+  awk -F '\t' 'BEGIN {OFS="\t"} 
+    NR==1 {print $0, "FEATURE"} 
+    NR>1 {
+      pos=$2;
+      if (pos >= 97 && pos <= 438) gene="Capsid(C)";
+      else if (pos >= 439 && pos <= 936) gene="prM/M";
+      else if (pos >= 937 && pos <= 2421) gene="Envelope(E)";
+      else if (pos >= 2422 && pos <= 3477) gene="NS1";
+      else if (pos >= 3478 && pos <= 4131) gene="NS2A";
+      else if (pos >= 4132 && pos <= 4521) gene="NS2B";
+      else if (pos >= 4522 && pos <= 6375) gene="NS3";
+      else if (pos >= 6376 && pos <= 6825) gene="NS4A";
+      else if (pos >= 6826 && pos <= 7560) gene="NS4B";
+      else if (pos >= 7561 && pos <= 10269) gene="NS5";
+      else gene="UTR";
+      print $0, gene 
+}' "./ivar_results/${sample}_ivar.tsv" > "./ivar_results/annotated/${sample}_annotated.tsv"; done
+   41  # Write header
+   42  echo -e "Sample\tRegion\tPos\tRef\tAlt\tRef_DP\tAlt_DP\tAlt_Freq\tTotal_DP\tPVal\tPass\tGene_Feature" > ivar_results/master_annotated_variants.tsv
+   43  # Append passing variants from all samples
+   44  for f in ivar_results/annotated/*_annotated.tsv; do   sample=$(basename "$f" _annotated.tsv);   awk -v s="$sample" -F '\t' 'BEGIN {OFS="\t"} $14 == "TRUE" {print s, $1, $2, $3, $4, $5, $8, $11, $12, $13, $14, $15}' "$f"     >> ivar_results/master_annotated_variants.tsv; done
+   45  head -n 15 ivar_results/master_annotated_variants.tsv
+   46  tail -n 15 ivar_results/master_annotated_variants.tsv
+   47  history > project_command_log.txt

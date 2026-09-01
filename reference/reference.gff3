@@ -1,0 +1,76 @@
+>Feature ref|NC_001474.2|
+1	96	5'UTR
+2	70	stem_loop
+			gene	-
+			note	stem-loop A (SLA)
+71	80	regulatory
+			gene	-
+			note	oligo U track spacer
+			regulatory_class	other
+81	96	regulatory
+			gene	-
+			note	5' upstream AUG region (UAR)
+			regulatory_class	promoter
+81	95	stem_loop
+			note	stem-loop B (SLB)
+97	10272	gene
+			gene	POLY
+			gene_syn	polyprotein gene
+			locus_tag	DENV_gp1
+			db_xref	GeneID:1494449
+97	10272	CDS
+			product	polyprotein
+			protein_id	ref|NP_056776.2|
+			note	contains structural proteins, C-prM/M-E and non-structural proteins, NS1-NS2A/B-NS3-NS4A/B-NS5
+116	132	stem_loop
+			gene	-
+			note	capsid region hairpin (cHP)
+134	144	regulatory
+			gene	-
+			note	5' conserved sequence (CS); also called cyclization sequence
+			regulatory_class	other
+10273	10723	3'UTR
+10299	10723	ncRNA
+			ncRNA_class	lncRNA
+			product	sfRNA1
+			gene	-
+			note	subgenomic flavivirus RNA
+10303	10368	stem_loop
+			gene	-
+			note	flaviviral nuclease-resistant RNA 1 (fNR1); also called stem-loop 1 or xrRNA1
+10372	10723	ncRNA
+			ncRNA_class	lncRNA
+			product	sfRNA2
+			note	subgenomic flavivirus RNA
+10376	10441	stem_loop
+			gene	-
+			note	flaviviral nuclease-resistant RNA 2 (fNR2); also called stem-loop 2 or xrRNA2
+10449	10723	ncRNA
+			ncRNA_class	lncRNA
+			product	sfRNA3
+			note	subgenomic flavivirus RNA
+10453	10534	stem_loop
+			gene	-
+			note	dumbbell 1 (DBI); also called xrRNA3
+10536	10723	ncRNA
+			ncRNA_class	lncRNA
+			product	sfRNA4
+			note	subgenomic flavivirus RNA
+10540	10621	stem_loop
+			gene	-
+			note	dumbbell 2 (DBII); also called xrRNA4
+10618	10628	regulatory
+			gene	-
+			note	3' conserved sequence (CS); also called cyclization sequence
+			regulatory_class	other
+10631	10644	stem_loop
+			gene	-
+			note	short hairpin (sHP)
+10642	10658	regulatory
+			gene	-
+			note	3' upstream AUG region (UAR)
+			regulatory_class	promoter
+10645	10723	stem_loop
+			gene	-
+			note	3' stem-loop (3'SL)
+
