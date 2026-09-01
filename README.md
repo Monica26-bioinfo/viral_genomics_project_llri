@@ -50,7 +50,7 @@ samtools faidx reference/dengue_ref.fasta
 
 for sample in DRR067444 DRR067448 DRR067449 DRR067462 DRR067463 DRR067465; do
   bwa mem reference/dengue_ref.fasta trimmed_result/${sample}.trimmed.fastq.gz > aligned/${sample}.sam
-  samtools view -bS aligned/${sample}.sam \vert{} samtools sort -o aligned/${sample}.sorted.bam
+  samtools view -bS aligned/${sample}.sam | samtools sort -o aligned/${sample}.sorted.bam
   samtools index aligned/${sample}.sorted.bam
   rm aligned/${sample}.sam
 done
@@ -89,12 +89,8 @@ iVar uses `samtools mpileup` to generate pileup format, which is then processed 
 ```bash
 for sample in DRR067444 DRR067448 DRR067449 DRR067462 DRR067463 DRR067465; do
   echo "Processing ${sample}..."
-  samtools mpileup -A -d 0 --reference ./data/dengue2/sequences.fa -B -Q 0 \
-    "./aligned/${sample}.sorted.bam" | \
-  ivar variants \
-    -p "./ivar_results/${sample}_ivar" \
-    -q 20 \
-    -t 0.03
+  samtools mpileup -A -d 0 --reference ./data/dengue2/sequences.fa -B -Q 0 
+    "./aligned/${sample}.sorted.bam" | ivar variants -p "./ivar_results/${sample}_ivar" -q 20 -t 0.03
 done
 ```
 
